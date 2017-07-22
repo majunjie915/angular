@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>作用域</title>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="../../lib/angular-1.2.25.min.js"></script>
+</head>
+<body ng-controller="myCtrl">
+	<h1>{{carName}}</h1>
+	<input ng-model="name"></input>
+	<p>{{greeting}}</p>
+	<button ng-click="sayHi()">点我</button>
+	<p>当你修改输入框中的值时，会影响到模型(model),当然也会影响到控制器对应的属性值。</p>
+
+	<ul>
+		<li ng-repeat="name in names">{{name}}</li>
+	</ul>
+	<h1>{{lastName}} 家族成员：</h1>
+	<ul>
+		<li ng-repeat="x in names">{{x}} {{lastName}}</li>
+	</ul>
+
+	<script type="text/javascript">
+		
+		var app = angular.module("myApp", []);
+		app.controller("myCtrl", function($scope){
+			$scope.carName = "Volvo";
+			$scope.name = "runoob";
+			$scope.sayHi = function(){
+				$scope.greeting = "Hello " + $scope.name + "!"
+			}
+			$scope.names = ["Emil", "Tobias", "Linus"];
+			$scope.lastName = "Refsnes";
+		})
+	</script>
+</body>
+</html>

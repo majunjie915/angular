@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>自定义指令</title>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="../../lib/angular-1.2.25.min.js"></script>
+</head>
+<body ng-controller="myCtrl">
+
+	<!-- 四类自定义指令 -->
+	<first-directive></first-directive>
+	<div first-directive></div>
+	<div class="first-directive"></div>
+	<!-- directive: first-directive -->
+
+	<!-- ng-model -->
+	名字：<input type="text" ng-model="name"></input>
+	<h2>你输入了：{{name}}</h2>
+
+	<!-- 验证用户输入 -->
+	<form name="myForm">
+		Email:<input type="email" name="myAddress" ng-model="text"></input>
+		<span ng-show="myForm.myAddress.$error.email">不是一个合法的邮箱地址</span>
+	</form>
+	<form name="form2" ng-init="myText='text@runoob.com'">
+		Email:
+		<input type="email" ng-model="myText" name="address2" required=""></input>
+		<p>编辑邮箱地址，查看状态改变</p>
+		<h1>状态</h1>
+		<p>Valid: {{form2.address2.$valid}} (如果输入的值合法则为true)</p>
+		<p>Dirty: {{form2.address2.$dirty}} (如果值改变则为true)</p>
+		<p>Touched: {{form2.address2.$touched}} (如果通过触屏点击则为true)</p>
+	</form>
+
+	<script type="text/javascript">
+		var app = angular.module("myApp", []);
+		app.directive("firstDirective", function(){
+			return {
+				restrict: "ECMA",// 需设置否则不显示, E:element, A:attribute, C:class, M:comment
+        		template : "<h1>自定义元素名指令!</h1>",
+        		replace: true // 是否用模板的内容替换包含自定义指令的标签,默认false
+    		};
+		})
+		/*app.directive("secondDirective", function(){
+			return {
+				restrict: "A",
+				template: "<h1>自定义属性指令</h1>"
+			};
+		})
+		app.directive("thirdDirective", function(){
+			return {				
+				restrict: "C",
+				template: "<h1>自定义类名指令</h1>",
+				replace: true
+			}
+		})
+		app.directive("forthDirective", function(){
+			return {
+				restrict: "M",
+				template: "<h1>自定义注释指令</h1>",
+				replace: true // 若不被替换就不会显示
+			}
+		})*/
+		app.controller("myCtrl", function($scope){
+			$scope.name = "John Doe";
+		})
+	</script>
+</body>
+</html>
