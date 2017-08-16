@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>理解AngularJS的$apply和$digest方法</title>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="../../lib/angular-1.2.25.min.js"></script>
+</head>
+<body ng-controller="myCtrl">
+	<div>Delayed message: {{message}}</div>
+
+	<script type="text/javascript">
+		// 如果angular不能检测到model是否发生了变化,就需要我们手动调用$apply方法。angular能检测到model变化时,说明自动调用了$apply方法。$apply调用后就会自动触发$digest
+		/*angular.module("myApp", []).
+		controller("myCtrl", function($scope){
+			$scope.getMessage = function(){
+				setTimeout(function(){
+					$scope.message = "Fetched after 3 second";
+					console.log("message : "+$scope.message);
+				} ,2000)
+			}
+			$scope.getMessage();
+		})*/
+		/*angular.module("myApp", []).
+		controller("myCtrl", function($scope){
+			$scope.getMessage = function(){
+				setTimeout(function(){
+					$scope.$apply(function(){
+						$scope.message = "setTimeout在angular体制之外的函数，需要调用$apply(),同时$digest()会被自定调用，触发脏检测，watchers会被执行来检查scope内的modles是否变化，有变化就会执行listener函数";
+						console.log("message : "+$scope.message);
+					})
+				} ,2000)
+			}
+			$scope.getMessage();
+		})*/
+		/*angular.module("myApp", []).
+		controller("myCtrl", function($scope){
+			$scope.getMessage = function(){
+				setTimeout(function(){
+					$scope.message = "$apply()不带参数的调用方式";
+					console.log("message : "+$scope.message);
+					$scope.$apply();
+				}, 2000)
+			}
+			$scope.getMessage();
+		})*/
+		angular.module("myApp", []).
+		controller("myCtrl", function($scope, $timeout, $interval){
+			$scope.getMessage = function(){				
+				$timeout(function() {
+					$scope.message = "angularJS 自带的延迟调用函数";
+					console.log("message : "+$scope.message);
+				}, 2000);
+			}
+			$scope.getMessage();
+			$scope.timer = $interval(function(){
+				alert("定时循环3次")
+			}, 2000, 3)
+			$interval.cancel($scope.timer);
+		}) // 在调用angular内置方法时，需要将该方法座位参数注入到controller中
+	</script>
+</body>
+</html>
