@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>angular service</title>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="../../lib/angular-1.2.25.min.js"></script>
+</head>
+<body>
+	<!-- angularJS 服务是一个函数或对象，可在angularJS应用中使用。内建了30多个模块 -->
+	<div ng-app="myApp" ng-controller="myCtrl">
+		<p>当前页面的URL：</p>
+		<h3>{{myCtrl}}</h3>
+
+		<p>$http 引入scope 页面：</p>
+		<h3>{{myScope}}</h3>
+
+		<p>两秒后显示信息：</p>
+		<h1>{{myHeart}}</h1>
+		<p>{{truth}}</p>
+
+		<p>255 的16进制数：</p>
+		<h1>{{hex}}</h1>
+
+		<p>256的16进制数：</p>
+		<h1>{{256 | myFormat}}</h1>
+	</div>
+
+	<script type="text/javascript">
+		angular.module("myApp", [])			   
+			   .controller("myCtrl", function($scope, $location, $http, $timeout, $interval, hexafy){
+			   		// $location服务
+			   		$scope.myCtrl = $location.absUrl();
+
+			   		// $http服务
+			   		$http.get("../js/testService.json").then(function(response){
+			   			$scope.myScope = response.data.data.key;
+			   		})
+
+			   		// $timeout服务
+			   		$scope.myHeart = "hello angular";
+			   		$timeout(function(){
+			   			$scope.myHeart = "How are you today?";
+			   		}, 2000);
+
+			   		// interval服务
+			   		$interval(function(){
+			   			$scope.truth = "I want to sleep...";
+			   		} ,3000);
+
+			   		// 自定义服务
+			   		$scope.hex = hexafy.myFunc(255);
+			   })
+			   .service("hexafy", function(){// 自定义服务
+			   		this.myFunc = function(x){
+			   			return x.toString(16);
+			   		}
+			   })
+			   .filter("myFormat", ["hexafy", function(hexafy){
+			   		return function(x){
+			   			return hexafy.myFunc(x);
+			   		};
+			   }]); // 过滤器中使用服务
+	</script>
+</body>
+</html>
